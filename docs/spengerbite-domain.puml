@@ -1,0 +1,197 @@
+' tag::kopf[]
+@startuml spengerbite-domain
+
+' ---- Layout und Stil ----
+hide empty methods
+hide empty fields
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+' ---- Legende ----
+legend right
+<<RichType>>: ein Wert mit Regel, eine Spalte
+<<ValueObject>>: mehrere Werte, ein Begriff, eingebettet
+<<entity>>: hat eine Id, eigene Tabelle
+<<nn>>: not null
+<<unique>>: eindeutig auf Spaltenebene
+<<discriminator>>: Spalte payment_type fuer die Vererbung in einer Tabelle
+endlegend
+
+' end::kopf[]
+' =====================================================
+' Shared: RichTypes, Value Objects, Enums
+' =====================================================
+' tag::shared1[]
+package "Shared" as P_Shared #EEF6FF {
+
+  class Email << (R,#FFEECC) RichType >> {
+    +value: String <<nn>>
+  }
+
+  class Phone << (R,#FFEECC) RichType >> {
+    +value: String <<nn>>
+    ..
+    E.164, z. B. +436601234567
+  }
+
+  class PasswordHash << (R,#FFEECC) RichType >> {
+    +value: String <<nn>>
+    ..
+    BCrypt, erzeugt nur der PasswordService
+  }
+
+  class Money << (V,#CCEEFF) ValueObject >> {
+    +amount: BigDecimal <<nn>>
+    +currency: String <<nn>>
+  }
+
+  class Address << (V,#CCEEFF) ValueObject >> {
+    +street: String <<nn>>
+    +zip: String <<nn>>
+    +city: String <<nn>>
+  }
+
+' end::shared1[]
+' tag::shared2[]
+  class Contact << (V,#CCEEFF) ValueObject >> {
+    +firstName: String <<nn>>
+    +lastName: String <<nn>>
+    +phone: Phone
+  }
+
+  class OpeningHours << (V,#CCEEFF) ValueObject >> {
+    +opensAt: LocalTime <<nn>>
+    +closesAt: LocalTime <<nn>>
+  }
+
+  enum CuisineType {
+    ITALIAN
+    JAPANESE
+    AMERICAN
+    ORIENTAL
+    AUSTRIAN
+  }
+
+  enum OrderStatus {
+    SUBMITTED
+    CONFIRMED
+    DELIVERED
+    CANCELLED
+  }
+}
+
+' end::shared2[]
+' =====================================================
+' Restaurant
+' =====================================================
+' tag::restaurant[]
+package "Restaurant" as P_Restaurant #EAF8EA {
+
+  class Restaurant <<entity>> {
+    +id: Long <<nn>>
+    +name: String <<nn>>
+    +cuisine: CuisineType <<nn>>
+    +address: Address <<nn>>
+    +openingHours: OpeningHours <<nn>>
+    +imageUrl: String <<nn>>
+  }
+
+  class MenuItem <<entity>> {
+    +id: Long <<nn>>
+    +restaurant: Restaurant <<nn>>
+    +name: String <<nn>>
+    +description: String <<nn>>
+    +price: Money <<nn>>
+    +imageUrl: String <<nn>>
+  }
+
+  Restaurant "1" o-- "0..*" MenuItem : restaurant
+}
+
+' end::restaurant[]
+' =====================================================
+' Customer
+' =====================================================
+' tag::customer[]
+package "Customer" as P_Customer #FFF5E6 {
+
+  class Customer <<entity>> {
+    +id: Long <<nn>>
+    +email: Email <<nn>> <<unique>>
+    +passwordHash: PasswordHash <<nn>>
+    +contact: Contact <<nn>>
+  }
+}
+
+' end::customer[]
+' =====================================================
+' Order
+' =====================================================
+' tag::order[]
+package "Order" as P_Order #F3E8FF {
+
+  class Order <<entity>> {
+    +id: Long <<nn>>
+    +restaurant: Restaurant <<nn>>
+    +customer: Customer
+    +status: OrderStatus <<nn>>
+    +email: Email <<nn>>
+    +contact: Contact <<nn>>
+    +deliveryAddress: Address <<nn>>
+    +items: List<OrderItem> <<nn>>
+  }
+
+  class OrderItem <<entity>> {
+    +id: Long <<nn>>
+    +menuItem: MenuItem <<nn>>
+    +unitPrice: Money <<nn>>
+    +quantity: int <<nn>>
+  }
+
+  Order "1" *-- "1..*" OrderItem : items
+}
+
+' end::order[]
+' =====================================================
+' Payment
+' =====================================================
+' tag::payment[]
+package "Payment" as P_Payment #FFEAEA {
+
+  abstract class Payment <<entity>> {
+    +id: Long <<nn>>
+    +order: Order <<nn>> <<unique>>
+    +type: String <<nn>> <<discriminator>>
+  }
+
+  class CashPayment <<entity>> {
+    +changeFor: Money
+  }
+
+  class CardPayment <<entity>> {
+    +brand: String <<nn>>
+    +cardLast4: String <<nn>>
+  }
+
+  CashPayment -up-|> Payment
+  CardPayment -up-|> Payment
+}
+
+' end::payment[]
+' =====================================================
+' Beziehungen über die Pakete hinweg (Assoziationen)
+' =====================================================
+' tag::beziehungen[]
+Order "0..*" --> "1" Restaurant : restaurant
+Order "0..*" --> "0..1" Customer : customer (null = Gast)
+OrderItem "0..*" --> "1" MenuItem : menuItem
+Payment "0..1" -- "1" Order : order
+
+' end::beziehungen[]
+' ---- unsichtbare Kanten nur fuer die Anordnung ----
+P_Order -[hidden]right- P_Restaurant
+P_Restaurant -[hidden]right- P_Customer
+P_Restaurant -[hidden]down- P_Shared
+P_Customer -[hidden]down- P_Payment
+
+@enduml
