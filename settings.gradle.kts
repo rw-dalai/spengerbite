@@ -1,1 +1,2 @@
-rootProject.name = "spengerbite-java-2027"
+rootProject.name = "spengerbite"
+include("app", "jpa-demo")
