@@ -5,6 +5,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /** Guard checks arguments, throws IllegalArgumentException (400) and returns the normalized value. */
 public final class Guard {
@@ -43,6 +44,32 @@ public final class Guard {
             throw new IllegalArgumentException(field + " must be non-negative, but was " + value);
         }
         return value;
+    }
+
+    /** Number must be greater than zero. */
+    public static int positive(int value, String field) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(field + " must be positive, but was " + value);
+        }
+        return value;
+    }
+
+    /** Collection must not be null or empty. */
+    public static <T extends Collection<?>> T notEmpty(T value, String field) {
+        notNull(value, field);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(field + " cannot be empty");
+        }
+        return value;
+    }
+
+    /** Text must have exactly the given length. */
+    public static String hasLength(String value, int length, String field) {
+        String text = hasText(value, field);
+        if (text.length() != length) {
+            throw new IllegalArgumentException(field + " must have " + length + " characters, but was " + text);
+        }
+        return text;
     }
 
     /** Any condition the caller must meet. */
