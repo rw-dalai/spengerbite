@@ -31,6 +31,7 @@ public class GuardTest {
        assertEquals("Pizzeria Mario", result);
    }
 
+    @Test
    public void Email_ShouldThrow_WhenTextHasOnlyWhitespace() {
 
        // Given
