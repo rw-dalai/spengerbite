@@ -21,7 +21,7 @@ H2 console on http://localhost:8080/h2-console, JDBC URL from the boot log.
 | Module | What it is |
 |---|---|
 | `app` | SpengerBite |
-| `jpa-demo` | JPA exercises, a library with authors and books, independent of app |
+| `jpa-demo` | JPA exercises, a person with passport and trips, independent of app |
 
 Tasks take the module as prefix, `:app:test`, `:jpa-demo:bootRun`.
 Without a prefix a task runs in every module that has it.
