@@ -14,7 +14,7 @@ public class CardPayment extends Payment {
 
     private String brand;
 
-    // Invariant: the last four digits only, never the card number. Length check is enough, no regex.
+    // Invariant: the last four digits only.
     private String cardLast4;
 
 
