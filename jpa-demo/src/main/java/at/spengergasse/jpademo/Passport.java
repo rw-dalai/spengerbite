@@ -15,6 +15,7 @@ public class Passport extends BaseEntity {
 
     private String number;
 
+    // This side is a navigation property & holds the FK
     @OneToOne(optional = false)
     @ToString.Exclude
     private Person person;

@@ -16,9 +16,13 @@ public class Trip extends BaseEntity {
 
     private String destination;
 
+    // This side is a navigation property & holds the FK
     @ManyToOne(optional = false)
     @ToString.Exclude
     private Person person;
+
+
+    // --- Business Methods ---
 
     public Trip(String destination, Person person) {
         this.destination = destination;
