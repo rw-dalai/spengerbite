@@ -4,6 +4,7 @@ import at.spengergasse.spengerbite.model.BaseEntity;
 import at.spengergasse.spengerbite.model.Guard;
 import at.spengergasse.spengerbite.model.customer.Customer;
 import at.spengergasse.spengerbite.model.payment.Payment;
+import at.spengergasse.spengerbite.model.restaurant.MenuItem;
 import at.spengergasse.spengerbite.model.restaurant.Restaurant;
 import at.spengergasse.spengerbite.model.shared.Address;
 import at.spengergasse.spengerbite.model.shared.Contact;
@@ -45,22 +46,31 @@ public class Order extends BaseEntity {
     @ToString.Exclude
     private Payment payment;
 
-    // Invariant: at least one item, items die with the order
     @Getter(AccessLevel.NONE)
     private final List<OrderItem> items = new ArrayList<>();
 
 
     // --- Business Ctor ---
 
-    public Order(Restaurant restaurant, Customer customer, Email email, Contact contact, Address deliveryAddress, List<OrderItem> items) {
+    public Order(Restaurant restaurant, Customer customer, Email email, Contact contact, Address deliveryAddress) {
         this.status = OrderStatus.SUBMITTED;
         this.restaurant = Guard.notNull(restaurant, "restaurant");
         this.customer = customer;
         this.email = Guard.notNull(email, "email");
         this.contact = Guard.notNull(contact, "contact");
         this.deliveryAddress = Guard.notNull(deliveryAddress, "deliveryAddress");
-        this.items.addAll(Guard.notEmpty(items, "items"));
-        // TODO business rule: all items belong to this restaurant
+        // TODO business rules in place(): at least one item, all items from this restaurant
+    }
+
+
+    // --- Business Methods ---
+
+    // Order is the parent, OrderItem is the child. Parent sets both sides.
+    public OrderItem addItem(MenuItem menuItem, int quantity) {
+        // TODO business rule: menuItem belongs to this restaurant
+        OrderItem item = new OrderItem(this, menuItem, quantity);
+        items.add(item);
+        return item;
     }
 
 

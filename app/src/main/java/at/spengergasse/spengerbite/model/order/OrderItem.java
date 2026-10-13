@@ -15,6 +15,9 @@ import lombok.ToString;
 public class OrderItem extends BaseEntity {
 
     @ToString.Exclude
+    private Order order;
+
+    @ToString.Exclude
     private MenuItem menuItem;
 
     // Invariant: snapshot of the price at order time
@@ -25,7 +28,8 @@ public class OrderItem extends BaseEntity {
 
     // --- Business Ctor ---
 
-    public OrderItem(MenuItem menuItem, int quantity) {
+    public OrderItem(Order order, MenuItem menuItem, int quantity) {
+        this.order = Guard.notNull(order, "order");
         this.menuItem = Guard.notNull(menuItem, "menuItem");
         this.unitPrice = menuItem.getPrice();
         this.quantity = Guard.positive(quantity, "quantity");
