@@ -138,17 +138,19 @@ package "Order" as P_Order #F3E8FF {
     +email: Email <<nn>>
     +contact: Contact <<nn>>
     +deliveryAddress: Address <<nn>>
+    +payment: Payment
     +items: List<OrderItem> <<nn>>
   }
 
   class OrderItem <<entity>> {
     +id: Long <<nn>>
+    +order: Order <<nn>>
     +menuItem: MenuItem <<nn>>
     +unitPrice: Money <<nn>>
     +quantity: int <<nn>>
   }
 
-  Order "1" *-- "1..*" OrderItem : items
+  Order "1" *-- "1..*" OrderItem : items / order
 }
 
 ' end::order[]
@@ -185,7 +187,7 @@ package "Payment" as P_Payment #FFEAEA {
 Order "0..*" --> "1" Restaurant : restaurant
 Order "0..*" --> "0..1" Customer : customer (null = Gast)
 OrderItem "0..*" --> "1" MenuItem : menuItem
-Payment "0..1" -- "1" Order : order
+Payment "0..1" -- "1" Order : order / payment
 
 ' end::beziehungen[]
 ' ---- unsichtbare Kanten nur fuer die Anordnung ----
