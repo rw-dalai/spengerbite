@@ -1,10 +1,12 @@
 package at.spengergasse.spengerbite.model.shared;
 
 import at.spengergasse.spengerbite.model.Guard;
+import jakarta.persistence.Embeddable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Embeddable
 public record Money(BigDecimal amount, String currency) {
 
     public Money {

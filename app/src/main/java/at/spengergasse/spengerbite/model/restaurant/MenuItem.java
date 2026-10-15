@@ -3,6 +3,8 @@ package at.spengergasse.spengerbite.model.restaurant;
 import at.spengergasse.spengerbite.model.BaseEntity;
 import at.spengergasse.spengerbite.model.Guard;
 import at.spengergasse.spengerbite.model.shared.Money;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +13,12 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+@Entity
 public class MenuItem extends BaseEntity {
 
     @ToString.Exclude
+    @ManyToOne(optional = false)
     private Restaurant restaurant;
 
     private String name;
