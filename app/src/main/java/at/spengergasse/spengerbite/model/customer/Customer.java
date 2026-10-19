@@ -5,6 +5,8 @@ import at.spengergasse.spengerbite.model.Guard;
 import at.spengergasse.spengerbite.model.shared.Contact;
 import at.spengergasse.spengerbite.model.shared.Email;
 import at.spengergasse.spengerbite.model.shared.PasswordHash;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Customer extends BaseEntity {
 
     // Invariant: the login, unique
@@ -21,7 +24,7 @@ public class Customer extends BaseEntity {
     @ToString.Exclude
     private PasswordHash passwordHash;
 
-    private Contact contact;
+    // private Contact contact;
 
 
     // --- Business Ctor ---
@@ -29,6 +32,6 @@ public class Customer extends BaseEntity {
     public Customer(Email email, PasswordHash passwordHash, Contact contact) {
         this.email = Guard.notNull(email, "email");
         this.passwordHash = Guard.notNull(passwordHash, "passwordHash");
-        this.contact = Guard.notNull(contact, "contact");
+        // this.contact = Guard.notNull(contact, "contact");
     }
 }

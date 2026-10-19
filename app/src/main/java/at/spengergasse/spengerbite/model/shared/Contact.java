@@ -1,7 +1,9 @@
 package at.spengergasse.spengerbite.model.shared;
 
 import at.spengergasse.spengerbite.model.Guard;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public record Contact(String firstName, String lastName, Phone phone) {
 
     public Contact {
