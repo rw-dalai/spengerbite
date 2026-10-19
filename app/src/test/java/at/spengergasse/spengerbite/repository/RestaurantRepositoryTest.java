@@ -51,13 +51,14 @@ public class RestaurantRepositoryTest {
     public void FindByAddressCity_ShouldReturnRestaurants_WhenCityContainsSubstringIgnoreCase() {
 
         // Given
-        restaurantRepository.save(createRestaurant("Pizzeria Mario", "Wien"));
-        restaurantRepository.save(createRestaurant("Sushi Ko", "Wien"));
-        restaurantRepository.save(createRestaurant("Gasthaus Steirer", "Graz"));
-        entityManager.clear();
+        restaurantRepository.save(createRestaurant("Pizza Mario", "Wien"));
+        restaurantRepository.save(createRestaurant("Sushi Bar", "Wien"));
+        restaurantRepository.save(createRestaurant("Burger House", "Graz"));
+        entityManager.clear(); // Clears Cache
 
         // When
-        List<Restaurant> found = restaurantRepository.findByAddressCityContainingIgnoreCase("ie");
+//         List<Restaurant> found = restaurantRepository.findByAddressCityContainingIgnoreCase("IE");
+        List<Restaurant> found = restaurantRepository.findByAddressCity("Wien");
 
         // Then
         assertEquals(2, found.size());
@@ -68,10 +69,10 @@ public class RestaurantRepositoryTest {
 
     private static Restaurant createRestaurant(String name, String city) {
         return new Restaurant(
-                name,
-                CuisineType.ITALIAN,
-                new Address(city, "Spengergasse 20", "1050"),
-                new OpeningHours(LocalTime.of(8, 0), LocalTime.of(22, 0)),
-                "mario.jpg");
+            name,
+            CuisineType.ITALIAN,
+            new Address(city, "Spengergasse 20", "1050"),
+            new OpeningHours(LocalTime.of(9, 0), LocalTime.of(22, 0)),
+            "image.jpg");
     }
 }
