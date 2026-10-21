@@ -8,6 +8,8 @@ import at.spengergasse.spengerbite.model.shared.OpeningHours;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.ToString;
 
 // JPA
 @Entity
+@Table(indexes = @Index(name = "ix_restaurant_city", columnList = "city")) // simple index, used by findByAddressCity
 public class Restaurant extends BaseEntity {
 
     private String name;

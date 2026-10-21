@@ -5,20 +5,29 @@ import at.spengergasse.spengerbite.model.Guard;
 import at.spengergasse.spengerbite.model.shared.Money;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+// Lombok
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
+// JPA
 @Entity
+// compound unique over the FK and a column: one dish name once per restaurant
+@Table(uniqueConstraints = @UniqueConstraint(
+    name = "uk_menu_item_restaurant_name",
+    columnNames = {"restaurant_id", "name"}))
 public class MenuItem extends BaseEntity {
 
-    @ToString.Exclude
+    // 1:n uni, child: FK restaurant_id, not null
     @ManyToOne(optional = false)
+    @ToString.Exclude
     private Restaurant restaurant;
 
     private String name;

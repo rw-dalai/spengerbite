@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -30,8 +31,10 @@ public abstract class BaseEntity {
 
     // --- Audit ---
 
+    @CreationTimestamp // Hibernate sets it on insert
     private Instant createdAt;
 
+    @UpdateTimestamp // Hibernate sets it on every update
     private Instant updatedAt;
 
     // TODO equals and hashCode
