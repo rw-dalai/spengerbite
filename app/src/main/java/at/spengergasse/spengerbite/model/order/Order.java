@@ -10,6 +10,15 @@ import at.spengergasse.spengerbite.model.shared.Address;
 import at.spengergasse.spengerbite.model.shared.Contact;
 import at.spengergasse.spengerbite.model.shared.Email;
 import at.spengergasse.spengerbite.model.shared.OrderStatus;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,18 +27,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+// Lombok
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+// JPA
+// "order" is a reserved word in SQL, so the table is called orders
+@Entity
+// compound index with the FK first: my orders of one customer, newest first
+@Table(name = "orders", indexes = @Index(
+    name = "ix_orders_customer_created", columnList = "customer_id, created_at"))
 public class Order extends BaseEntity {
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    // Invariant: only one restaurant per order
+    // 1:n uni, child: FK restaurant_id, not null, only one restaurant per order
+    @ManyToOne(optional = false)
     @ToString.Exclude
     private Restaurant restaurant;
 
-    // Invariant: null = guest order
+    // 1:n uni, child: FK customer_id, nullable, null = guest order
+    @ManyToOne
     @ToString.Exclude
     private Customer customer;
 
@@ -42,12 +62,18 @@ public class Order extends BaseEntity {
     // Invariant: snapshot
     private Address deliveryAddress;
 
-    // Invariant: null = not paid yet, exactly one payment once paid
+    // 1:1 bi, parent: navigation only, the FK order_id lives in Payment, null = not paid yet
+    @OneToOne(mappedBy = "order")
     @ToString.Exclude
     private Payment payment;
 
+    // 1:n bi, parent of the composition: navigation only, the FK order_id lives in OrderItem
+    // items die with the order: cascade saves and deletes them with it, orphanRemoval deletes one removed from the list
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter(AccessLevel.NONE)
     private final List<OrderItem> items = new ArrayList<>();
+
+
 
 
     // --- Business Ctor ---
