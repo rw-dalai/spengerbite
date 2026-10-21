@@ -46,7 +46,8 @@ dependencies {
     // Persistence: JPA, Hibernate, H2 in memory
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-h2console")
-    runtimeOnly("com.h2database:h2")
+    // H2 2.4.240 breaks check constraints with "in (...)" as Hibernate 7 writes them for discriminators
+    runtimeOnly("com.h2database:h2:2.3.232")
 
     // Code Generation: Lombok, compile time only
     compileOnly("org.projectlombok:lombok")
