@@ -16,16 +16,16 @@ public class Trip extends BaseEntity {
 
     private String destination;
 
-    // This side is a navigation property & holds the FK
+    private LocalDate startDate;
+
+    // 1:n bi, child of the composition: FK person_id, not null
     @ManyToOne(optional = false)
     @ToString.Exclude
     private Person person;
 
-
-    // --- Business Methods ---
-
-    public Trip(String destination, Person person) {
+    public Trip(String destination, LocalDate startDate, Person person) {
         this.destination = destination;
+        this.startDate = startDate;
         this.person = person;
     }
 }

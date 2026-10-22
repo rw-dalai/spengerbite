@@ -7,15 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
+// Lombok
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+// JPA
+@Entity
 public class Passport extends BaseEntity {
 
     private String number;
 
-    // This side is a navigation property & holds the FK
+    // 1:1 bi, child: FK person_id, not null and unique
     @OneToOne(optional = false)
     @ToString.Exclude
     private Person person;
