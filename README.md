@@ -36,6 +36,7 @@ app/src/main/java/at/spengergasse/spengerbite/
   api/                    API Endpoints
   service/                Business Use Cases
   repository/             Data Access Layer
+  persistence/            converters for rich types, demo seed
   model/                  Domain Model
 docs/                     Documentation
 ```
@@ -45,6 +46,8 @@ docs/                     Documentation
 - No setters. State changes only through the constructor and business methods.
 - Records for value objects and rich types, classes for entities, Lombok `@Getter` only.
 - `Guard` checks arguments and normalizes them. Business rules go to `Rules`.
+- Relationships: 1:1 bidirectional, 1:n unidirectional from the child, composition bidirectional with cascade. Cascade only inside a composition, never on `@ManyToOne`.
+- Constraints and indexes carry names, `uk_` and `ix_`, so the error handler can map them.
 - Test names `Sut_ShouldExpectation_WhenCondition`, body Given, When, Then.
 - Commits `type: message`, lower case, present tense. Types: feat, fix, build, test, docs, refactor.
 
