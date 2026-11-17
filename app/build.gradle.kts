@@ -43,6 +43,12 @@ dependencies {
     // Web: Tomcat, Controller, Jackson
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
 
+    // Validation: Bean Validation (@NotBlank, @Valid) for request DTOs
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // API docs: code first OpenAPI, Swagger UI at /swagger-ui.html
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
+
     // Persistence: JPA, Hibernate, H2 in memory
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-h2console")
@@ -58,6 +64,8 @@ dependencies {
     // Testing: JUnit, Spring Test, AssertJ, Mockito
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    // REST Assured: HTTP calls against the running app in tests, 6.x for Groovy 5 in Boot 4
+    testImplementation("io.rest-assured:rest-assured:6.0.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // libphone

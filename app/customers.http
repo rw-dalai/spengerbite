@@ -1,0 +1,38 @@
+### GET customer 1 -> 200
+GET http://localhost:8080/api/customers/1
+
+### GET unknown customer -> 404
+GET http://localhost:8080/api/customers/999
+
+### POST valid customer -> 201
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "email": "anna@spengergasse.at",
+  "password": "secret123",
+  "firstName": "Anna",
+  "lastName": "Huber",
+  "phone": "0664 111 22 33"
+}
+
+### POST email already registered -> 409
+# TODO
+
+### POST invalid email -> 400
+# TODO
+
+### POST blank first name -> 400
+# TODO
+
+### POST invalid phone, the domain says no -> 400
+# TODO
+
+### POST broken JSON -> 400
+# TODO
+
+### DELETE customer created above (id 2 after a fresh start) -> 204
+# TODO
+
+### DELETE unknown customer -> 404
+# TODO

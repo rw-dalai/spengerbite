@@ -6,6 +6,9 @@ spring:
   h2:
     console:
       enabled: true
+  mvc:
+    problemdetails:
+      enabled: true # RFC 9457: Spring answers its own errors (e.g. @Valid) as application/problem+json
   jpa:
     hibernate:
       ddl-auto: create-drop

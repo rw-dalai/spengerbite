@@ -1,0 +1,62 @@
+### GET all restaurants -> 200
+GET http://localhost:8080/api/restaurants
+
+### GET restaurant 1 -> 200
+GET http://localhost:8080/api/restaurants/1
+
+### GET unknown restaurant -> 404
+# TODO
+
+### POST valid restaurant -> 201
+POST http://localhost:8080/api/restaurants
+Content-Type: application/json
+
+{
+  "name": "Burger House",
+  "cuisine": "AMERICAN",
+  "city": "Graz",
+  "street": "Herrengasse 1",
+  "zip": "8010",
+  "opensAt": "10:00",
+  "closesAt": "22:00",
+  "imageUrl": "/images/burger.jpg"
+}
+
+### POST blank name -> 400
+# TODO
+
+### POST closesAt before opensAt -> 400
+# TODO
+
+### POST broken JSON -> 400
+# TODO
+
+### PUT restaurant 2 (bonus) -> 200
+# TODO
+
+### PUT blank name (bonus) -> 400
+# TODO
+
+### PUT closesAt before opensAt (bonus) -> 400
+# TODO
+
+### PUT unknown restaurant (bonus) -> 404
+# TODO
+
+### PATCH opening hours of restaurant 2 (bonus) -> 200
+# TODO
+
+### PATCH closesAt before opensAt (bonus) -> 400
+# TODO
+
+### PATCH unknown restaurant (bonus) -> 404
+# TODO
+
+### DELETE restaurant with menu items -> 409
+# TODO
+
+### DELETE restaurant created above (id 3 after a fresh start) -> 204
+# TODO
+
+### DELETE unknown restaurant -> 404
+# TODO

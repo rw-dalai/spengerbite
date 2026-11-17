@@ -40,10 +40,23 @@ public class Restaurant extends BaseEntity {
     // --- Business Ctor ---
 
     public Restaurant(String name, CuisineType cuisine, Address address, OpeningHours openingHours, String imageUrl) {
+        update(name, cuisine, address, openingHours, imageUrl);
+    }
+
+
+    // --- Business Methods ---
+
+    // PUT: replace all fields at once, same guards as the constructor
+    public void update(String name, CuisineType cuisine, Address address, OpeningHours openingHours, String imageUrl) {
         this.name = Guard.hasText(name, "name");
         this.cuisine = Guard.notNull(cuisine, "cuisine");
         this.address = Guard.notNull(address, "address");
         this.openingHours = Guard.notNull(openingHours, "openingHours");
         this.imageUrl = Guard.hasText(imageUrl, "imageUrl");
+    }
+
+    // PATCH: change only the opening hours
+    public void changeOpeningHours(OpeningHours openingHours) {
+        this.openingHours = Guard.notNull(openingHours, "openingHours");
     }
 }
